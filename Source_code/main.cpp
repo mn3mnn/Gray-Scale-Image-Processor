@@ -23,8 +23,7 @@ unsigned char sketch[SIZE][SIZE];
 
 void load_img() {
 	char fileName[100];
-	cout << "Ahlan ya user ya habibi \n"
-		<< "Please enter file name of the image to process : ";
+	cout << "Please enter file name of the image to process : ";
 
 	cin >> fileName;
 	strcat(fileName, ".bmp");
@@ -101,6 +100,7 @@ void invertFilter() {
 void mergeFilter() {
 	char imagename[100];
 
+	// load the second image 
 	cout << "enter the second image file name: ";
 	cin >> imagename;
 
@@ -111,6 +111,7 @@ void mergeFilter() {
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
+			//get the average of the pixel with the corresponding pixel in second image
 			image[i][j] = (image[i][j] + image2[i][j]) / 2;
 		}
 	}
@@ -156,6 +157,7 @@ void flipFilter() {
 
 void darkenLightenFilter() {
 	char choice;
+	//ask the user to darken or lighten
 	cout << "Do you want to (d)arken or (l)ighten? type d or l:";
 	cin >> choice;
 	for (int i = 0; i < SIZE; i++)
@@ -165,6 +167,7 @@ void darkenLightenFilter() {
 
 			if (choice == 'd')
 			{
+				// the darken version take each pixel and get it's half
 				image[i][j] = image[i][j] /2;
 			}
 			else if (choice == 'l')
@@ -176,6 +179,7 @@ void darkenLightenFilter() {
 				}
 				else
 				{
+					// the lighten version take each pixel smaller than 205 and add 50 to it
 					image[i][j] = image[i][j] + 50;
 				}
 			}
@@ -383,6 +387,7 @@ void blur() {
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
+			// check the pixels on the edges and don't change them
 			if (i == 0 || j == 0)
 			{
 				image[i][j] = image[i][j];
@@ -402,28 +407,47 @@ void blur() {
 
 void shrink()
 {   
-	int factor;
+		int factor;
 	cout << "1. 1/2 the normal" << endl
-		<< "2. 1/4 the normal" << endl
-		<< "3. 1/3 the normal" << endl
-		<< "choose the new dimensions: ";
+		 << "2. 1/4 the normal" << endl
+		 << "3. 1/3 the normal" << endl
+		 << "choose the new dimensions: ";
 
 	cin >> factor;
-	// create new image2 with the new size 
-	for (int i = 0; i < SIZE; i++)
+	if (factor == 1 || factor == 2 || factor == 3)
 	{
-		for (int j = 0; j < SIZE; j++)
+		if (factor == 1)
 		{
-			image2[i / factor][j / factor] = image[i][j];
+			factor = 2;
+		}
+		else if (factor == 2)
+		{
+			factor = 4;
+		}
+		else if (factor == 3)
+		{
+			factor = 3;
+		}
+		// create new image2 with the new size
+		for (int i = 0; i < SIZE; i++)
+		{
+			for (int j = 0; j < SIZE; j++)
+			{
+				image2[i / factor][j / factor] = image[i][j];
+			}
+		}
+		// then change img and img2
+		for (int i = 0; i < SIZE; i++)
+		{
+			for (int j = 0; j < SIZE; j++)
+			{
+				image[i][j] = image2[i][j];
+			}
 		}
 	}
-	// then change img and img2
-	for (int i = 0; i < SIZE; i++)
+	else
 	{
-		for (int j = 0; j < SIZE; j++)
-		{
-			image[i][j] = image2[i][j];
-		}
+		cout << "wrong invalid";
 	}
 }
 
