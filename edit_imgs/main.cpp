@@ -383,6 +383,30 @@ void mirrorHalf() {
 }
 
 //----------------------------------------------------------------------
+void blur()
+{
+  int sum = 0;
+
+  for (int i = 0; i < SIZE; i++)
+  {
+    for (int j = 0; j < SIZE; j++)
+    {
+      if (i == 0 || j == 0)
+      {
+        image[i][j] = image[i][j];
+      }
+      else if (i == SIZE - 1 || j == SIZE - 1)
+      {
+        image[i][j] = image[i][j];
+      }
+      else
+      {
+        image[i][j] = (image[i][j] + image[i - 1][j - 1] + image[i - 1][j] + image[i - 1][j + 1] + image[i][j - 1] + image[i][j + 1] + image[i + 1][j - 1] + image[i + 1][j] + image[i + 1][j + 1]) / 9;
+      }
+    }
+  }
+  saveImage();
+}
 //----------------------------------------------------------------------
 int main() {
 	char selected;
