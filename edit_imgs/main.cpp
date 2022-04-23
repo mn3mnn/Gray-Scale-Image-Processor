@@ -55,6 +55,8 @@ void show_menu() {
 		"5 - Darken and Lighten Image\n" <<
 		"6 - Rotate Image\n" <<
 		"7 - Detect Image Edges\n" <<
+		"8 - Shrink Image\n" <<
+		"9 - Blur Image\n" <<
 		"a-  Mirror 1/2 Image\n"<<
 		"s - Save the image to a file\n" <<
 		"0 - Exit" << endl;
@@ -407,6 +409,41 @@ void blur()
   }
   saveImage();
 }
+//______________________________________________________________________
+void shrink()
+{
+  int factor;
+  cout << "1. 1/2 the normal" << endl
+       << "2. 1/4 the normal" << endl
+       << "3. 1/3 the normal" << endl
+       << "choose the new dimensions: ";
+
+  cin >> factor;
+  if (factor == 1 || factor == 2 || factor == 3)
+  {
+    for (int i = 0; i < SIZE; i++)
+    {
+      for (int j = 0; j < SIZE; j++)
+      {
+
+        newimage[i / factor][j / factor] = image[i][j];
+      }
+    }
+    char imageFileName[100];
+
+    // Get gray scale image target file name
+    cout << "Enter the target image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat(imageFileName, ".bmp");
+    writeGSBMP(imageFileName, newimage);
+  }
+  else
+  {
+    cout << "wrong invalid";
+  }
+}
 //----------------------------------------------------------------------
 int main() {
 	char selected;
@@ -451,6 +488,18 @@ int main() {
 		else if (selected == '7')
 		{
 			detectImageEdges();
+			run = askNext();
+
+		}
+		else if (selected == '8')
+		{
+			shrink();
+			run = askNext();
+
+		}
+		else if (selected == '9')
+		{
+			blur();
 			run = askNext();
 
 		}
