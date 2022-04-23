@@ -4,7 +4,7 @@
 //
 // Group A  S11, 12
 // Authors: monaem tarek 20210220 
-//			youssef Ihab 20210466
+//			youssef ehab 20210466
 //			magdy 
 // 
 // Date:    1/4/2022
@@ -20,6 +20,8 @@ using namespace std;
 unsigned char image[SIZE][SIZE];
 unsigned char image2[SIZE][SIZE];
 unsigned char sketch[SIZE][SIZE];
+unsigned char newimage[SIZE][SIZE];
+
 
 void load_img() {
 	char fileName[100];
@@ -55,6 +57,8 @@ void show_menu() {
 		"5 - Darken and Lighten Image\n" <<
 		"6 - Rotate Image\n" <<
 		"7 - Detect Image Edges\n" <<
+		"8 - Shrink Image\n" <<
+		"9 - Blur Image\n" <<
 		"a-  Mirror 1/2 Image\n"<<
 		"s - Save the image to a file\n" <<
 		"0 - Exit" << endl;
@@ -94,6 +98,7 @@ void invertFilter() {
 
 //----------------------------------------------------------------------
 void mergeFilter() {
+	// load the second image that user want to merge
 	char imagename[100];
 
 	cout << "enter the second image file name: ";
@@ -101,14 +106,17 @@ void mergeFilter() {
 
 	strcat(imagename, ".bmp");
 	readGSBMP(imagename, image2);
-
+	
+	//for loop for each pixel
 	for (int i = 0; i < SIZE; i++)
 	{
 		for (int j = 0; j < SIZE; j++)
 		{
+			//get the average of two pixels and put it in corresponding pixel
 			image[i][j] = (image[i][j] + image2[i][j]) / 2;
 		}
 	}
+	save_image();
 }
 
 //----------------------------------------------------------------------
@@ -151,8 +159,10 @@ void flipFilter() {
 //----------------------------------------------------------------------
 void darkenLightenFilter() {
 	char choice;
+	// ask the user about his filter to darken or lighten
 	cout << "Do you want to (d)arken or (l)ighten? type d or l:";
 	cin >> choice;
+	// for loop to each pixel
 	for (int i = 0; i < SIZE; i++)
 	{
 		for (int j = 0; j < SIZE; j++)
@@ -160,6 +170,7 @@ void darkenLightenFilter() {
 
 			if (choice == 'd')
 			{
+				//if he choose darken each pixel will divide by 2
 				image[i][j] = image[i][j] /2;
 			}
 			else if (choice == 'l')
@@ -167,10 +178,12 @@ void darkenLightenFilter() {
 
 				if (image[i][j] > 205)
 				{
+					// if condition because the gray scale image from 0 to 255
 					image[i][j] = 255;
 				}
 				else
 				{
+					// if he choose lighten each pixel will increase by 50
 					image[i][j] = image[i][j] + 50;
 				}
 			}
@@ -180,6 +193,7 @@ void darkenLightenFilter() {
 			}
 		}
 	}
+	save_image();
 }
 
 //----------------------------------------------------------------------
@@ -383,6 +397,73 @@ void mirrorHalf() {
 }
 
 //----------------------------------------------------------------------
+void blur()
+{
+  int sum = 0;
+
+// for loop for each pixel
+  for (int i = 0; i < SIZE; i++)
+  {
+    for (int j = 0; j < SIZE; j++)
+    {
+      // if condition  to check the edges pixel and then don't change it
+	  if (i == 0 || j == 0)
+      {
+        image[i][j] = image[i][j];
+      }
+      else if (i == SIZE - 1 || j == SIZE - 1)
+      {
+        image[i][j] = image[i][j];
+      }
+      else
+      {
+		  //if the pixels not on the edges 
+		  // i will  make 3x3 matrix and get the average of them and put the average in specified pixel
+        image[i][j] = (image[i][j] + image[i - 1][j - 1] + image[i - 1][j] + image[i - 1][j + 1] + image[i][j - 1] + image[i][j + 1] + image[i + 1][j - 1] + image[i + 1][j] + image[i + 1][j + 1]) / 9;
+      }
+    }
+  }
+  save_image();
+}
+//______________________________________________________________________
+void shrink()
+{
+  int factor;
+  //ask the user of the new dimensions he wants
+  cout << "1. 1/2 the normal" << endl
+       << "2. 1/4 the normal" << endl
+       << "3. 1/3 the normal" << endl
+       << "choose the new dimensions: ";
+
+  cin >> factor;
+  //check if he choose correct value
+  if (factor == 1 || factor == 2 || factor == 3)
+  {
+	  //for loop for each pixel
+    for (int i = 0; i < SIZE; i++)
+    {
+      for (int j = 0; j < SIZE; j++)
+      {
+		//make new array and put the pixel of image in the new with new dimensions
+        newimage[i / factor][j / factor] = image[i][j];
+      }
+    }
+    // save the new image
+	char imageFileName[100];
+    
+	// Get gray scale image target file name
+    cout << "Enter the target image file name: ";
+    cin >> imageFileName;
+
+    // Add to it .bmp extension and load image
+    strcat(imageFileName, ".bmp");
+    writeGSBMP(imageFileName, newimage);
+  }
+  else
+  {
+    cout << "wrong invalid";
+  }
+}
 //----------------------------------------------------------------------
 int main() {
 	char selected;
@@ -427,6 +508,18 @@ int main() {
 		else if (selected == '7')
 		{
 			detectImageEdges();
+			run = askNext();
+
+		}
+		else if (selected == '8')
+		{
+			shrink();
+			run = askNext();
+
+		}
+		else if (selected == '9')
+		{
+			blur();
 			run = askNext();
 
 		}
