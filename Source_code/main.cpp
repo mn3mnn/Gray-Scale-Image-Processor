@@ -23,7 +23,7 @@ unsigned char sketch[SIZE][SIZE];
 
 void load_img() {
 	char fileName[100];
-	cout << "Please enter file name of the image to process : ";
+	cout << "Please enter file name of the image to open : ";
 
 	cin >> fileName;
 	strcat(fileName, ".bmp");
@@ -35,7 +35,7 @@ void save_image() {
 	char fileName[100];
 
 	// Get image name to save
-	cout << "Enter the target image file name to save: ";
+	cout << "Enter new image name to save: ";
 	cin >> fileName;
 
 	// Add to it .bmp extension and load image
@@ -57,9 +57,8 @@ void show_menu() {
 		"8 - Enlarge Image\n" <<
 		"9 - Shrink Image\n" <<
 		"a-  Mirror 1/2 Image\n"<<
-		"b - Shuffle Image\n" <<
 		"c - Blur Image\n" <<
-		"s - Save the image to a file\n" <<
+		"s - Save the image as a new file\n" <<
 		"0 - Exit" << endl;
 }
 //----------------------------------------------------------------------
@@ -563,148 +562,6 @@ void enlarge_image4()
 		}
 	}
 }
-//------------------------------------------------------------------
-void shuffle() {
-loop:
-	int x1, x2, x3, x4;
-	cout << "Enter the order of the shuffle that you want" << endl;
-	cin >> x1 >> x2 >> x3 >> x4;
-	unsigned char temp[256][256];
-
-	if (x1 == 1) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j] = image[i][j];
-			}
-		}
-	}
-	else if (x1 == 2) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j] = image[i][j + 128];
-			}
-		}
-	}
-	else if (x1 == 3) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j] = image[i + 128][j];
-			}
-		}
-	}
-	else if (x1 == 4) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j] = image[i + 128][j + 128];
-			}
-		}
-	}
-	else {
-		cout << "Out of range, please try again" << endl;
-		goto loop;
-	}
-	if (x2 == 1) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j + 128] = image[i][j];
-			}
-		}
-	}
-	else if (x2 == 2) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j + 128] = image[i][j + 128];
-			}
-		}
-	}
-	else if (x2 == 3) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][j + 128] = image[i + 128][j];
-			}
-		}
-	}
-	else if (x2 == 4) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i][128] = image[i + 128][j + 128];
-			}
-		}
-	}
-	else {
-		cout << "Out of range, please try again" << endl;
-		goto loop;
-	}
-	if (x3 == 1) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j] = image[i][j];
-			}
-		}
-	}
-	else if (x3 == 2) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j] = image[i][j + 128];
-			}
-		}
-	}
-	else if (x3 == 3) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j] = image[i + 128][j];
-			}
-		}
-	}
-	else if (x3 == 4) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[+128][j] = image[i + 128][j + 128];
-			}
-		}
-	}
-	else {
-		cout << "Out of range, please try again" << endl;
-		goto loop;
-	}
-	if (x4 == 1) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j + 128] = image[i][j];
-			}
-		}
-	}
-	else if (x4 == 2) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j + 128] = image[i][j + 128];
-			}
-		}
-	}
-	else if (x4 == 3) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j + 128] = image[i + 128][j];
-			}
-		}
-	}
-	else if (x4 == 4) {
-		for (int i = 0; i < 128; i++) {
-			for (int j = 0; j < 128; j++) {
-				temp[i + 128][j + 128] = image[i + 128][j + 128];
-			}
-		}
-	}
-	else {
-		cout << "Out of range, please try again" << endl;
-		goto loop;
-	}
-	for (int i = 0; i < 256; i++) {
-		for (int j = 0; j < 256; j++) {
-			image[i][j] = temp[i][j];
-		}
-	}
-}
 
 // return 1 if choice is y, else return 0
 int askNext() {
@@ -779,11 +636,6 @@ void chooseFilters() {
 		else if (selected == 'a')
 		{
 			mirrorHalf();
-			run = askNext();
-		}
-		else if (selected == 'b')
-		{
-			shuffle();
 			run = askNext();
 		}
 		else if (selected == 'c')
