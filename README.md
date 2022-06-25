@@ -1,8 +1,8 @@
-# Bmp Gray-Scale Image processing 256x256
-## Faculty of Computers and Artificial Intelligence - Cairo University
-This an educational project.
+# Bmp Grayscale Image Processing 256x256
 
-The program include 12 filters to edit bitmap gray scale images 256x256
+This is an educational project in the faculty of Computers and AI at Cairo University
+
+### The program includes 11 filters to edit bitmap grayscale images 256x256
 
 **Original image:**
 
